@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "title": "writer configuration",
+  "properties": {
+      "BearerToken": {
+      "type": "string",
+      "title": "Bearer Token",
+      "default": "Token",
+      "description": "Bearer Token"
+     }
+    }
+}
