@@ -7,6 +7,24 @@
       "title": "Bearer Token",
       "default": "Token",
       "description": "Bearer Token"
+     },
+     "FileName": {
+      "type": "string",
+      "title": "File to upload",
+      "default": "filename",
+      "description": "File to upload"
+     },
+     "Dataset": {
+      "type": "string",
+      "title": "Dataset",
+      "default": "dataset_default",
+      "description": "Dataset to upload to"
+     },
+     "Metadata": {
+      "type": "string",
+      "title": "Metadata",
+      "default": "",
+      "description": "Metadata"
      }
     }
 }
