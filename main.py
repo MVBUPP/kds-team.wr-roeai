@@ -14,15 +14,22 @@ class Component(ComponentBase):
         metadata=params['Metadata']
         
         url = "https://api.roe-ai.com/v1/datasets/files/upload/"
+         
+        
+        # Make the POST request
         with open(file, "rb") as File:
+                
             payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"file\"\r\n\r\n{FileName}\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"dataset_id\"\r\n\r\n{dataset}\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"metadata\"\r\n\r\n{metadata}\r\n-----011000010111000001101001--\r\n\r\n".format(FileName=File, metadata=metadata, dataset=dataset)
             headers = {
                 "Authorization": "Bearer {Token}".format(Token=Token),
                 "Content-Type": "multipart/form-data"
             }
             response = requests.request("POST", url, data=payload, headers=headers)
-
+            
+            print(response.status_code)
             print(response.text)
+            print("Request Headers:", response.request.headers)
+            print("Request Body:", response.request.body)
 
 if __name__ == "__main__":
         comp = Component()
