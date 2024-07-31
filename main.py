@@ -11,13 +11,13 @@ class Component(ComponentBase):
         super().__init__()
     def run(self):       
         params = self.configuration.parameters
-        TOKEN = params['BearerToken']
+        Token = params['BearerToken']
 
         url = "https://api.roe-ai.com/v1/datasets/files/upload/"
 
         payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"file\"\r\n\r\n<string>\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"dataset_id\"\r\n\r\n<string>\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"metadata\"\r\n\r\n<any>\r\n-----011000010111000001101001--\r\n\r\n"
         headers = {
-            "Authorization": "Bearer {TOKEN}",
+            "Authorization": "Bearer {Token}".format(Token=Token),
             "Content-Type": "multipart/form-data"
         }
 
