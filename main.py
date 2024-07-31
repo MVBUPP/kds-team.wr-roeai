@@ -10,7 +10,7 @@ class Component(ComponentBase):
     def __init__(self):
         super().__init__()
     def run(self):       
-        params = self.__dir__configuration.parameters
+        params = self.configuration.parameters
         TOKEN = params['BearerToken']
 
         url = "https://api.roe-ai.com/v1/datasets/files/upload/"
