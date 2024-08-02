@@ -7,7 +7,7 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 class Component(ComponentBase):
     def __init__(self):
         super().__init__()
-        
+
     def run(self):       
         params = self.configuration.parameters
         Token = params['BearerToken']
@@ -25,7 +25,7 @@ class Component(ComponentBase):
 
         # REQUIRED
         files=[
-        ('file', (file, open(file,'rb'), content_type))
+        ('file', (file, open(("in/{file}").format(file=file),'rb'), content_type))
         ]
 
         headers = {
