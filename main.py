@@ -25,7 +25,7 @@ class Component(ComponentBase):
 
         # REQUIRED
         files=[
-        ('file', (file, open(("in/{file}").format(file=file),'rb'), content_type))
+        ('file', (file, open(("in/tables/{file}").format(file=file),'rb'), content_type))
         ]
 
         headers = {
