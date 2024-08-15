@@ -20,6 +20,12 @@
       "default": "",
       "description": "Dataset to upload to"
      },
+     "TableName": {
+      "type": "string",
+      "title": "Table Name",
+      "default": "",
+      "description": "Name for created table"
+     },
      "Metadata": {
       "type": "string",
       "title": "Metadata",
