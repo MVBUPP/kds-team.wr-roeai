@@ -18,9 +18,14 @@ class Component(ComponentBase):
         headers = {
         "Authorization": "Bearer {Token}".format(Token=Token)
         }
+        
+        # Get filename to open
+        path = "in/tables/"
+        dir_list = os.listdir(path)
+        fileName=dir_list[0]
 
         # open csv file to parse column str for query
-        with open('in/test1.csv', mode ='r')as file:
+        with open('in/tables/{filename}'.format(filename=fileName), mode ='r')as file:
             csvFile = csv.reader(file)
             line1 = next(csvFile)
             for i in range(len(line1)):
