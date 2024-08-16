@@ -13,19 +13,13 @@ class Component(ComponentBase):
     def run(self):       
         params = self.configuration.parameters
         Token = params['BearerToken']
-        # file=params['FileName']
         TABLENAME=params["TableName"]
-        # COLUMNTUPLE=params["Columns"]
-        # url = "https://api.roe-ai.com/v1/datasets/files/upload/"
         url = "https://api.roe-ai.com/v1/database/query/"
-
-        # payload = {"query": "CREATE TABLE {tableName} (x String, y String, z String) ENGINE = Memory AS SELECT 1;".format(tableName=TABLENAME)}
         headers = {
         "Authorization": "Bearer {Token}".format(Token=Token)
         }
-        # response = requests.request("POST", url, json=payload, headers=headers)
-        # print(response.text)
 
+        # open csv file to parse column str for query
         with open('in/test1.csv', mode ='r')as file:
             csvFile = csv.reader(file)
             line1 = next(csvFile)
@@ -38,20 +32,22 @@ class Component(ComponentBase):
                  colstr=colstr+item
                  colstr=colstr+", "
             colstr=colstr+"buffercolumn String)"    
-            print(colstr)
+           
+           #create table
             payload = {"query": "CREATE TABLE {tableName} {columns} ENGINE = Memory AS SELECT 1;".format(tableName=TABLENAME, columns=colstr)}
-            # payload = {"query": "CREATE TABLE {tableName} ENGINE = MergeTree;".format(tableName=TABLENAME)}
             response = requests.request("POST", url, json=payload, headers=headers)
-            print(response.text)
             
+            # remove extra column from column str
             payload={"query": "ALTER TABLE {tableName} DROP COLUMN buffercolumn;".format(tableName=TABLENAME)}
             response = requests.request("POST", url, json=payload, headers=headers)
-            print(response.text)
             
+            # Insert rest of data
             for lines in csvFile:
                     payload = {"query": "INSERT INTO {tableName} VALUES {line}".format(tableName=TABLENAME,line=tuple(lines))}
                     response = requests.request("POST", url, json=payload, headers=headers)
                     print(response.text)
+
+        ######Potential Single File implementation######
         # dataset_id and metadata are OPTIONAL, so omit the payload if you don't need them
         # payload = {
         #     'dataset_id': dataset,
