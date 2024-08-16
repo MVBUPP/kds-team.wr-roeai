@@ -14,55 +14,12 @@
       "default": "filename",
       "description": "File to upload"
      },
-     "Dataset": {
-      "type": "string",
-      "title": "Dataset",
-      "default": "",
-      "description": "Dataset to upload to"
-     },
      "TableName": {
       "type": "string",
       "title": "Table Name",
       "default": "",
       "description": "Name for created table"
      },
-     "Metadata": {
-      "type": "string",
-      "title": "Metadata",
-      "default": "",
-      "description": "Metadata"
-     },
-     "Content_Type":{
-      "type": "number",
-      "title": "content type:",
-      "enum":[
-          0,
-          1,
-          2,
-          3,
-          4,
-          5,
-          6,
-          7,
-          8,
-          9,
-          10
-        ],
-        "options":{
-          "enum_titles":[
-            "image/gif",   
-            "image/jpeg",   
-            "image/png",
-            "text/css",    
-            "text/csv",    
-            "text/html",    
-            "text/javascript",   
-            "text/plain",    
-            "text/xml",
-            "image/svg+xml"    
-          ]
-        },
-        "default":1
+    "default":1
       }
-    }
 }

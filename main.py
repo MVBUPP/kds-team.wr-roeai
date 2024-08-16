@@ -14,9 +14,6 @@ class Component(ComponentBase):
         params = self.configuration.parameters
         Token = params['BearerToken']
         # file=params['FileName']
-        dataset=params['Dataset']
-        metadata=params['Metadata']
-        content_type=params["Content_Type"]
         TABLENAME=params["TableName"]
         # COLUMNTUPLE=params["Columns"]
         # url = "https://api.roe-ai.com/v1/datasets/files/upload/"
@@ -34,7 +31,7 @@ class Component(ComponentBase):
             line1 = next(csvFile)
             for i in range(len(line1)):
                  if(i==0):
-                      line1[0]='col1'
+                      line1[0]=line1[0][3:]
                  line1[i]=line1[i]+" String"
             colstr="("
             for item in tuple(line1):
@@ -43,11 +40,15 @@ class Component(ComponentBase):
             colstr=colstr+"buffercolumn String)"    
             print(colstr)
             payload = {"query": "CREATE TABLE {tableName} {columns} ENGINE = Memory AS SELECT 1;".format(tableName=TABLENAME, columns=colstr)}
-            print(payload)
+            # payload = {"query": "CREATE TABLE {tableName} ENGINE = MergeTree;".format(tableName=TABLENAME)}
             response = requests.request("POST", url, json=payload, headers=headers)
             print(response.text)
+            
+            payload={"query": "ALTER TABLE {tableName} DROP COLUMN buffercolumn;".format(tableName=TABLENAME)}
+            response = requests.request("POST", url, json=payload, headers=headers)
+            print(response.text)
+            
             for lines in csvFile:
-                    lines.append("")
                     payload = {"query": "INSERT INTO {tableName} VALUES {line}".format(tableName=TABLENAME,line=tuple(lines))}
                     response = requests.request("POST", url, json=payload, headers=headers)
                     print(response.text)
