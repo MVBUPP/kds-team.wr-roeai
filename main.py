@@ -1,7 +1,6 @@
 
 print("testing deploy")
 import requests
-import os
 import csv
 from keboola.component import CommonInterface
 from keboola.component.base import ComponentBase
@@ -14,7 +13,7 @@ class Component(ComponentBase):
     def run(self):       
         params = self.configuration.parameters
         Token = params['BearerToken']
-        TABLENAME=params["TableName"]
+        TABLENAME=params["Dataset"]
         url = "https://api.roe-ai.com/v1/database/query/"
         headers = {
         "Authorization": "Bearer {Token}".format(Token=Token)
@@ -25,37 +24,33 @@ class Component(ComponentBase):
           # inName=table.destination
           table_def=ci.get_input_table_definition_by_name(table.destination)
 
-        # Get filename to open
-        path = "in/tables/"
-        dir_list = os.listdir(path)
-        fileName=dir_list[0]
-
         # open csv file to parse column str for query
      #    with open('in/tables/{filename}'.format(filename=fileName), mode ='r')as file:
-        with open(table_def.full_path, mode ='r')as file:
-            csvFile = csv.reader(file)
-            line1 = next(csvFile)
-            for i in range(len(line1)):
-                 line1[i]=line1[i]+" String"
-            colstr="("
-            for item in tuple(line1):
-                 colstr=colstr+item
-                 colstr=colstr+", "
-            colstr=colstr+"buffercolumn String)"    
-           
-           #create table
-            payload = {"query": "CREATE TABLE {tableName} {columns} ENGINE = Memory AS SELECT 1;".format(tableName=TABLENAME, columns=colstr)}
-            response = requests.request("POST", url, json=payload, headers=headers)
-            
-            # remove extra column from column str
-            payload={"query": "ALTER TABLE {tableName} DROP COLUMN buffercolumn;".format(tableName=TABLENAME)}
-            response = requests.request("POST", url, json=payload, headers=headers)
-            
-            # Insert rest of data
-            for lines in csvFile:
-                    payload = {"query": "INSERT INTO {tableName} VALUES {line}".format(tableName=TABLENAME,line=tuple(lines))}
-                    response = requests.request("POST", url, json=payload, headers=headers)
-                    print(response.text)
+          with open(table_def.full_path, mode ='r')as file:
+               csvFile = csv.reader(file)
+               line1 = next(csvFile)
+               for i in range(len(line1)):
+                    line1[i]=line1[i]+" String"
+               colstr="("
+               for item in tuple(line1):
+                    colstr=colstr+item
+                    colstr=colstr+", "
+               colstr=colstr+"buffercolumn String)"    
+               
+               #create table
+               payload = {"query": "CREATE TABLE {tableName} {columns} ENGINE = Memory AS SELECT 1;".format(tableName=TABLENAME, columns=colstr)}
+               response = requests.request("POST", url, json=payload, headers=headers)
+               
+               # remove extra column from column str
+               payload={"query": "ALTER TABLE {tableName} DROP COLUMN buffercolumn;".format(tableName=TABLENAME)}
+               response = requests.request("POST", url, json=payload, headers=headers)
+          
+               
+               # Insert rest of data
+               for lines in csvFile:
+                         payload = {"query": "INSERT INTO {tableName} VALUES {line}".format(tableName=TABLENAME,line=tuple(lines))}
+                         response = requests.request("POST", url, json=payload, headers=headers)
+                         print(response.text)
 
         ######Potential Single File implementation######
         # dataset_id and metadata are OPTIONAL, so omit the payload if you don't need them

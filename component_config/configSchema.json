@@ -7,19 +7,6 @@
       "title": "Bearer Token",
       "default": "Token",
       "description": "Bearer Token"
-     },
-     "FileName": {
-      "type": "string",
-      "title": "File to upload",
-      "default": "filename",
-      "description": "File to upload"
-     },
-     "TableName": {
-      "type": "string",
-      "title": "Table Name",
-      "default": "",
-      "description": "Name for created table"
-     },
-    "default":1
+     }
       }
 }
