@@ -2,6 +2,7 @@
 print("testing deploy")
 import requests
 import csv
+import os
 from keboola.component import CommonInterface
 from keboola.component.base import ComponentBase
 from requests_toolbelt.multipart.encoder import MultipartEncoder
@@ -18,15 +19,22 @@ class Component(ComponentBase):
         headers = {
         "Authorization": "Bearer {Token}".format(Token=Token)
         }
+     #    UNCOMMENT
         ci=CommonInterface()
         tables=ci.configuration.tables_input_mapping
+        ###TEMP FILE ACCESS###
+     #    path = "in/tables/"
+     #    dir_list = os.listdir(path)
+     #    fileName=dir_list[0]
+
         for table in tables:
           # inName=table.destination
           table_def=ci.get_input_table_definition_by_name(table.destination)
-
+     #UNCOMMENT TO HERE
         # open csv file to parse column str for query
      #    with open('in/tables/{filename}'.format(filename=fileName), mode ='r')as file:
-          with open(table_def.full_path, mode ='r')as file:
+          with open(table_def.full_path, mode ='r')as file: #UNCOMMENT 
+     #    with open('in/tables/{filename}'.format(filename=fileName), mode ='r')as file:
                csvFile = csv.reader(file)
                line1 = next(csvFile)
                for i in range(len(line1)):
@@ -46,11 +54,31 @@ class Component(ComponentBase):
                response = requests.request("POST", url, json=payload, headers=headers)
           
                
-               # Insert rest of data
+                # Insert rest of data
+               tableList=""
+               # i=0
+               add=True
                for lines in csvFile:
-                         payload = {"query": "INSERT INTO {tableName} VALUES {line}".format(tableName=TABLENAME,line=tuple(lines))}
-                         response = requests.request("POST", url, json=payload, headers=headers)
-                         print(response.text)
+                         for elements in lines:
+                               if elements.__contains__("'"):
+                                   #   
+                                   add=False
+                         if add:
+                              tableList+="{newLine}, ".format(newLine=tuple(lines))
+                         else:
+                              add=True    
+               #           i+=1
+               #           if i==500:
+               #                tableList=tableList[:-2]
+               #                payload = {"query": "INSERT INTO {tableName} VALUES {line}".format(tableName=TABLENAME,line=tableList)}
+               #                response = requests.request("POST", url, json=payload, headers=headers)
+               #                print(response.text)
+               #                tableList=""
+               #                i=0
+               tableList=tableList[:-2]
+               payload = {"query": "INSERT INTO {tableName} VALUES {line}".format(tableName=TABLENAME,line=tableList)}
+               response = requests.request("POST", url, json=payload, headers=headers)
+               print(response.text)
 
         ######Potential Single File implementation######
         # dataset_id and metadata are OPTIONAL, so omit the payload if you don't need them
