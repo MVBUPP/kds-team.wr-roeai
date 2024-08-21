@@ -4,3 +4,6 @@ keboola.http-client
 requests-toolbelt
 mock
 freezegun
+dataconf
+google-api-python-client
+git+https://github.com/keboola/sapi-python-client.git
