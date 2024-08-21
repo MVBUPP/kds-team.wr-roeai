@@ -34,21 +34,21 @@ class Component(ComponentBase):
         "Authorization": "Bearer {Token}".format(Token=Token)
         }
      #    UNCOMMENT
-     #    ci=CommonInterface()
-     #    tables=ci.configuration.tables_input_mapping
+        ci=CommonInterface()
+        tables=ci.configuration.tables_input_mapping
         ###TEMP FILE ACCESS###
-        path = "in/tables/"
-        dir_list = os.listdir(path)
-        fileName=dir_list[0]
+     #    path = "in/tables/"
+     #    dir_list = os.listdir(path)
+     #    fileName=dir_list[0]
 
-     #    for table in tables:
-     #      # inName=table.destination
-     #      table_def=ci.get_input_table_definition_by_name(table.destination)
+        for table in tables:
+          # inName=table.destination
+          table_def=ci.get_input_table_definition_by_name(table.destination)
      #UNCOMMENT TO HERE
         # open csv file to parse column str for query
      #    with open('in/tables/{filename}'.format(filename=fileName), mode ='r')as file:
-          # with open(table_def.full_path, mode ='r')as file: #UNCOMMENT 
-        with open('in/tables/{filename}'.format(filename=fileName), mode ='r')as file:
+        with open(table_def.full_path, mode ='r')as file: #UNCOMMENT 
+     #    with open('in/tables/{filename}'.format(filename=fileName), mode ='r')as file:
                csvFile = csv.reader(file)
                line1 = next(csvFile)
                for i in range(len(line1)):
