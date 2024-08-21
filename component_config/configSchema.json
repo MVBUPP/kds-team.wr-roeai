@@ -1,12 +1,31 @@
 {
   "type": "object",
   "title": "writer configuration",
+  "required": [
+    "credentials"
+  ],
   "properties": {
-      "BearerToken": {
+    "credentials": {
+      "type": "object",
+      "title": "Authorization",
+      "required": [
+        "#api_token"
+      ],
+      "properties": {
+        "#api_token": {
+          "type": "string",
+          "format": "password",
+          "title": "Bearer Token",
+          "propertyOrder": 1
+        }
+      },
+      "propertyOrder": 1
+    },
+    "dataset":{
       "type": "string",
-      "title": "Bearer Token",
-      "default": "Token",
-      "description": "Bearer Token"
-     }
-      }
+      "title": "Dataset"
+    }
+  }
+  
+      
 }
